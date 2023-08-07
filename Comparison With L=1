@@ -1,0 +1,20 @@
+import sympy as sp
+
+# Define the variable and limits
+L = 1  # Length of the lines in cm
+
+# Calculate the area of the trapezoid using the formula
+h = L
+b1 = L
+b2 = L
+area_trapezoid_formula = 0.5 * h * (b1 + b2)
+
+# Calculate the area of a quarter circle using the formula
+area_quarter_circle_formula = (1/4) * sp.pi * L**2
+
+# Calculate the absolute difference between the two results
+difference = abs(area_quarter_circle_formula - area_trapezoid_formula)
+
+print(f"Area of trapezoid using formula: {area_trapezoid_formula:.6f} square units")
+print(f"Area of quarter circle with radius L (formula): {area_quarter_circle_formula:.6f} square units")
+print(f"Difference between the two results: {difference:.6f} square units")
