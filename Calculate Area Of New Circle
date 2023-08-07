@@ -1,37 +1,45 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.integrate import quad
 
-def integrand(x, L):
-    return np.sqrt(L**2 - x**2)
+def calculate_area(L):
+    num_points = 1000
+
+    # Calculate the length of each sub-part
+    subpart_length = L / num_points
+
+    # Calculate the coordinates of points for each line
+    line1_points = [(i * subpart_length, 0) for i in range(1, num_points + 1)]
+    line2_points = [(0, i * subpart_length) for i in range(1, num_points + 1)]
+
+    # Calculate the area of the quarter circle approximation
+    area = 0
+    for i in range(num_points):
+        base = line2_points[i][1]
+        height = line1_points[i][0]
+        area += 0.5 * base * height
+
+    return area
 
 def main():
-    L = 10  # Length of one line (side of the square)
+    L = 10  # Length of the lines in cm
+    area = calculate_area(L)
     
-    # Numerically integrate the equation
-    area, _ = quad(integrand, 0, L, args=(L))
-    
-    # Calculate properties of the full circle
-    radius_full_circle = L
-    area_full_circle = 4 * (np.pi * radius_full_circle**2)
-    
-    print(f"Radius of the full circle: {radius_full_circle:.6f} units")
-    print(f"Area of the full circle: {area_full_circle:.6f} square units")
-    
-    # Plot the quarter circle and the lines
-    x_vals = np.linspace(0, L, 1000)
-    y_vals = integrand(x_vals, L)
-    
+    print(f"Length of lines (L): {L} cm")
+    print(f"Approximated area of quarter circle: {area:.6f} square cm")
+
+    # Plot the connected points
     plt.figure(figsize=(6, 6))
-    plt.plot(x_vals, y_vals, label='Quarter Circle')
-    plt.plot([0, L], [0, 0], label='Line 1', linestyle='dashed')
-    plt.plot([L, L], [0, L], label='Line 2', linestyle='dashed')
-    
-    plt.fill_between(x_vals, y_vals, color='lightgray', alpha=0.5)
-    
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.title('Area Occupied by Lines and Quarter Circle')
+
+    # Connect the points as described
+    for i in range(num_points):
+        plt.plot([line1_points[i][0], line2_points[-(i+1)][0]], [line1_points[i][1], line2_points[-(i+1)][1]], color='gray')
+
+    plt.plot(*zip(*line1_points), marker='o', label='Line 1 Points')
+    plt.plot(*zip(*line2_points), marker='x', label='Line 2 Points')
+
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.title('Connected Points for Lines with a Right Angle and Equal Parts')
     plt.legend()
     plt.grid()
     plt.show()
