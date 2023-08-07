@@ -1,48 +1,21 @@
-import numpy as np
-import matplotlib.pyplot as plt
+import sympy as sp
 
-def calculate_area(L):
-    num_points = 1000
+# Define the variable and limits
+x = sp.symbols('x')
+L = sp.symbols('L')  # Length of the lines, as a variable
 
-    # Calculate the length of each sub-part
-    subpart_length = L / num_points
+# Calculate the area of a quarter circle using the formula
+area_quarter_circle = (1/4) * sp.pi * L**2
 
-    # Calculate the coordinates of points for each line
-    line1_points = [(i * subpart_length, 0) for i in range(1, num_points + 1)]
-    line2_points = [(0, i * subpart_length) for i in range(1, num_points + 1)]
+# Calculate the area of the trapezoid
+b1 = L
+b2 = L
+h = L
+area_trapezoid = 0.5 * h * (b1 + b2)
 
-    # Calculate the area of the quarter circle approximation
-    area = 0
-    for i in range(num_points):
-        base = line2_points[i][1]
-        height = line1_points[i][0]
-        area += 0.5 * base * height
+# Calculate the area of the circular segment using integration
+area_segment = sp.integrate(L - x, (x, 0, L)) - area_trapezoid
 
-    return area
-
-def main():
-    L = 10  # Length of the lines in cm
-    area = calculate_area(L)
-    
-    print(f"Length of lines (L): {L} cm")
-    print(f"Approximated area of quarter circle: {area:.6f} square cm")
-
-    # Plot the connected points
-    plt.figure(figsize=(6, 6))
-
-    # Connect the points as described
-    for i in range(num_points):
-        plt.plot([line1_points[i][0], line2_points[-(i+1)][0]], [line1_points[i][1], line2_points[-(i+1)][1]], color='gray')
-
-    plt.plot(*zip(*line1_points), marker='o', label='Line 1 Points')
-    plt.plot(*zip(*line2_points), marker='x', label='Line 2 Points')
-
-    plt.xlabel('X')
-    plt.ylabel('Y')
-    plt.title('Connected Points for Lines with a Right Angle and Equal Parts')
-    plt.legend()
-    plt.grid()
-    plt.show()
-
-if __name__ == "__main__":
-    main()
+print(f"Area of quarter circle with radius L: {area_quarter_circle:.6f} square units")
+print(f"Area of trapezoid formed by connecting lines: {area_trapezoid:.6f} square units")
+print(f"Area of circular segment: {area_segment:.6f} square units")
