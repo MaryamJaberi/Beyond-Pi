@@ -1,0 +1,24 @@
+import sympy as sp
+
+# Define the variable and limits
+x = sp.symbols('x')
+L = sp.symbols('L')  # Length of the lines, as a variable
+
+# Calculate the area of a quarter circle using the formula
+area_quarter_circle_formula = (1/4) * sp.pi * L**2
+
+# Calculate the area of the trapezoid
+b1 = L
+b2 = L
+h = L
+area_trapezoid = 0.5 * h * (b1 + b2)
+
+# Calculate the area of the circular segment using integration
+area_segment = sp.integrate(L - x, (x, 0, L)) - area_trapezoid
+
+print(f"Area of quarter circle with radius L (formula): {area_quarter_circle_formula:.6f} square units")
+print(f"Area of circular segment (integral): {area_segment:.6f} square units")
+
+# Calculate the absolute difference between the two results
+difference = abs(area_quarter_circle_formula - area_segment)
+print(f"Difference between the two results: {difference:.6f} square units")
